@@ -4,18 +4,66 @@ import './App.css'
 import MyName from './components/MyName';
 import Counter from './components/Counter';
 import PhoneForm from './components/PhoneForm'
+import PhoneInfoList from './components/PhoneInfoList';
 //Component를 만드는 방법 두가지 (클래스, 함수)
 
 //클래스형
 class App extends Component {
-  handleCreate = (data) => {
-    console.log(data);
+  id = 2
+  state = {
+    information: [
+      {
+        id: 0,
+        name: 'yongjun',
+        phone: '010-1111-2222'
+      },
+      {
+        id: 1,
+        name: 'mh',
+        phone: '010-3333-4444'
+      }
+    ]
   }
+
+  handleCreate = (data) => {
+    const { information } = this.state;
+    this.setState({
+      // concat : 인자로 주어진 배열이나 값들을 기존 배열에 합쳐 새 배열을 반환
+      // ... : 전개연산자, 기존 객체의 내용을 해당 위치에 풀어준 후 우리가
+      //       설정하고싶은 값을 넣어 덮어쓸수 있게 함
+      information: information.concat({ id: this.id++, ...data })
+    })
+  }
+
+  handleRemove = (id) => {
+    const { information } = this.state;
+    this.setState({
+      information: information.filter(info => info.id !== id)
+    })
+  }
+
+  handleUpdate = (id, data) => {
+    const { information } = this.state;
+    this.setState({
+      information: information.map(
+        info => id === info.id
+          ? { ...info, ...data } // 새 객체를 생성 후 기존값과 data를 덮어씀
+          : info // 기존 값 유지
+      )
+    })
+  }
+
   render() {
+    const { information } = this.state
     return (
       <div>
         <PhoneForm
           onCreate={this.handleCreate}
+        />
+        <PhoneInfoList
+          data={information}
+          onRemove={this.handleRemove}
+          onUpdate={this.handleUpdate}
         />
       </div>
     );
