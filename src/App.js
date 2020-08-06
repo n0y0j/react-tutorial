@@ -3,15 +3,20 @@ import React, { Component } from 'react';
 import './App.css'
 import MyName from './components/MyName';
 import Counter from './components/Counter';
+import PhoneForm from './components/PhoneForm'
 //Component를 만드는 방법 두가지 (클래스, 함수)
 
 //클래스형
 class App extends Component {
+  handleCreate = (data) => {
+    console.log(data);
+  }
   render() {
     return (
       <div>
-        <MyName />
-        <Counter />
+        <PhoneForm
+          onCreate={this.handleCreate}
+        />
       </div>
     );
   }
